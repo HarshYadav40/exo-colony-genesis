@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 
 interface Message {
@@ -33,11 +34,14 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const chat = document.getElementById('astro-chat-box');
-    if (chat) {
-      chat.scrollTop = chat.scrollHeight;
+    if (scrollAreaRef.current) {
+      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollContainer) {
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+      }
     }
   }, [messages]);
 
@@ -132,57 +136,56 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
   };
 
   return (
-    <div className={`flex flex-col h-[500px] border rounded-lg glass-morphism neon-border ${className}`}>
-      {/* Chat Messages Area */}
-      <div 
-        id="astro-chat-box" 
-        className="flex-1 overflow-y-auto p-4 space-y-3"
-      >
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            <div className="flex items-start space-x-2 max-w-[85%]">
-              {message.sender === 'assistant' && (
+    <div className={`flex flex-col h-[400px] border rounded-lg glass-morphism neon-border ${className}`}>
+      {/* Chat Messages Area with ScrollArea */}
+      <ScrollArea ref={scrollAreaRef} className="flex-1 p-4">
+        <div className="space-y-3">
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div className="flex items-start space-x-2 max-w-[85%]">
+                {message.sender === 'assistant' && (
+                  <Avatar className="w-6 h-6 mt-1 pulse-glow">
+                    <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
+                      AB
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+                <div
+                  className={`p-3 rounded-lg text-sm ${
+                    message.sender === 'user'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-white/10 text-white'
+                  }`}
+                >
+                  {message.text}
+                </div>
+              </div>
+            </div>
+          ))}
+          
+          {isLoading && (
+            <div className="flex justify-start">
+              <div className="flex items-start space-x-2">
                 <Avatar className="w-6 h-6 mt-1 pulse-glow">
                   <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
                     AB
                   </AvatarFallback>
                 </Avatar>
-              )}
-              <div
-                className={`p-3 rounded-lg text-sm ${
-                  message.sender === 'user'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-white/10 text-white'
-                }`}
-              >
-                {message.text}
-              </div>
-            </div>
-          </div>
-        ))}
-        
-        {isLoading && (
-          <div className="flex justify-start">
-            <div className="flex items-start space-x-2">
-              <Avatar className="w-6 h-6 mt-1 pulse-glow">
-                <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
-                  AB
-                </AvatarFallback>
-              </Avatar>
-              <div className="bg-white/10 text-white p-3 rounded-lg text-sm">
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div className="bg-white/10 text-white p-3 rounded-lg text-sm">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </ScrollArea>
       
       {/* Input Area */}
       <div className="border-t border-white/10 p-3">
