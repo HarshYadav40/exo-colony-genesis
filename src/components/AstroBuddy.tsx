@@ -35,7 +35,8 @@ export const AstroBuddy: React.FC<AstroBuddyProps> = ({
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState('');
+  const [apiKey, setApiKey] = useState('AIzaSyAYmEj1tHJMiRm7lMsQbJ83Tf3IfkkY0Fg');
+  const [showApiInput, setShowApiInput] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,6 +50,7 @@ export const AstroBuddy: React.FC<AstroBuddyProps> = ({
     
     if (!apiKey.trim()) {
       toast.error('Please enter your Gemini API key first');
+      setShowApiInput(true);
       return;
     }
 
@@ -160,21 +162,31 @@ export const AstroBuddy: React.FC<AstroBuddyProps> = ({
           </Avatar>
           <CardTitle className="text-primary font-orbitron">AstroBuddy</CardTitle>
         </div>
-        <Button
-          onClick={onToggle}
-          variant="ghost"
-          size="sm"
-          className="text-muted-foreground hover:text-white"
-        >
-          ×
-        </Button>
+        <div className="flex items-center space-x-2">
+          <Button
+            onClick={() => setShowApiInput(!showApiInput)}
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground hover:text-white text-xs"
+          >
+            ⚙️
+          </Button>
+          <Button
+            onClick={onToggle}
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground hover:text-white"
+          >
+            ×
+          </Button>
+        </div>
       </CardHeader>
       
       <CardContent className="flex-1 flex flex-col space-y-3 p-4">
-        {!apiKey && (
-          <div className="bg-yellow-500/20 border border-yellow-500/50 rounded p-3 mb-2">
-            <p className="text-xs text-yellow-200 mb-2">
-              Enter your Gemini API key to activate AstroBuddy:
+        {showApiInput && (
+          <div className="bg-blue-500/20 border border-blue-500/50 rounded p-3 mb-2">
+            <p className="text-xs text-blue-200 mb-2">
+              Gemini API Key (pre-filled with default):
             </p>
             <Input
               type="password"
@@ -183,6 +195,13 @@ export const AstroBuddy: React.FC<AstroBuddyProps> = ({
               onChange={(e) => setApiKey(e.target.value)}
               className="text-xs"
             />
+            <Button
+              onClick={() => setShowApiInput(false)}
+              size="sm"
+              className="mt-2 text-xs"
+            >
+              Save
+            </Button>
           </div>
         )}
         
@@ -228,13 +247,13 @@ export const AstroBuddy: React.FC<AstroBuddyProps> = ({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask AstroBuddy..."
-            disabled={isLoading || !apiKey}
+            placeholder="Ask AstroBuddy anything..."
+            disabled={isLoading}
             className="flex-1 bg-white/5 border-white/20 text-white placeholder:text-muted-foreground"
           />
           <Button
             onClick={sendMessage}
-            disabled={isLoading || !input.trim() || !apiKey}
+            disabled={isLoading || !input.trim()}
             className="bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50"
           >
             Send
