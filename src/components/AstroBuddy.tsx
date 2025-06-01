@@ -41,7 +41,10 @@ export const AstroBuddy: React.FC<AstroBuddyProps> = ({
 
   useEffect(() => {
     if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollContainer) {
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+      }
     }
   }, [messages]);
 
@@ -205,8 +208,8 @@ export const AstroBuddy: React.FC<AstroBuddyProps> = ({
           </div>
         )}
         
-        <ScrollArea className="flex-1 pr-3" ref={scrollAreaRef}>
-          <div className="space-y-3">
+        <ScrollArea className="flex-1 h-full" ref={scrollAreaRef}>
+          <div className="space-y-3 pr-4">
             {messages.map((message) => (
               <div
                 key={message.id}
