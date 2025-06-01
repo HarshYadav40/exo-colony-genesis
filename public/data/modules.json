@@ -1,0 +1,41 @@
+
+[
+  {
+    "id": 1,
+    "name": "Habitat Dome",
+    "cost": 100,
+    "energy_required": 10,
+    "supports_population": 5,
+    "boosts_morale": 5
+  },
+  {
+    "id": 2,
+    "name": "Greenhouse",
+    "cost": 80,
+    "energy_required": 8,
+    "produces_food": 15,
+    "oxygen_output": 5
+  },
+  {
+    "id": 3,
+    "name": "Solar Array",
+    "cost": 60,
+    "energy_production": 20,
+    "maintenance": 2
+  },
+  {
+    "id": 4,
+    "name": "Radiation Shield",
+    "cost": 120,
+    "energy_required": 15,
+    "reduces_radiation": true
+  },
+  {
+    "id": 5,
+    "name": "Research Lab",
+    "cost": 150,
+    "energy_required": 10,
+    "increases_efficiency": true,
+    "unlocks_tech": ["Hydroponics", "Advanced Shielding"]
+  }
+]

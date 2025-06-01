@@ -1,0 +1,48 @@
+
+[
+  {
+    "id": 1,
+    "type": "solar_flare",
+    "description": "A massive solar flare disrupts energy systems.",
+    "impact": {
+      "energy": -20,
+      "morale": -5
+    }
+  },
+  {
+    "id": 2,
+    "type": "meteor_shower",
+    "description": "Meteor shower damages external modules.",
+    "impact": {
+      "modules_damaged": ["Solar Array", "Greenhouse"],
+      "repair_cost": 30
+    }
+  },
+  {
+    "id": 3,
+    "type": "resource_discovery",
+    "description": "Colonists discover a rare energy crystal deposit.",
+    "impact": {
+      "energy": 30,
+      "morale": 10
+    }
+  },
+  {
+    "id": 4,
+    "type": "colony_illness",
+    "description": "Unknown illness spreads through the habitat.",
+    "impact": {
+      "population": -2,
+      "morale": -15
+    }
+  },
+  {
+    "id": 5,
+    "type": "tech_breakthrough",
+    "description": "Research lab discovers improved hydroponic method.",
+    "impact": {
+      "food_production": 25,
+      "efficiency": 10
+    }
+  }
+]
