@@ -1,18 +1,10 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { toast } from 'sonner';
-
-interface Message {
-  id: string;
-  text: string;
-  sender: 'user' | 'assistant';
-  timestamp: Date;
-}
+import { AstroBuddyChat } from './AstroBuddyChat';
 
 interface AstroBuddyProps {
   isVisible: boolean;
@@ -25,119 +17,8 @@ export const AstroBuddy: React.FC<AstroBuddyProps> = ({
   onToggle,
   currentContext,
 }) => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      text: "Greetings, fellow space explorer! I'm AstroBuddy, your AI assistant for exoplanet colonization. I can help explain planetary features, recommend colony strategies, and teach you the science behind space colonization. How can I assist you today?",
-      sender: 'assistant',
-      timestamp: new Date(),
-    },
-  ]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKey] = useState('AIzaSyAYmEj1tHJMiRm7lMsQbJ83Tf3IfkkY0Fg');
   const [showApiInput, setShowApiInput] = useState(false);
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (scrollAreaRef.current) {
-      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-      if (scrollContainer) {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
-      }
-    }
-  }, [messages]);
-
-  const sendMessage = async () => {
-    if (!input.trim()) return;
-    
-    if (!apiKey.trim()) {
-      toast.error('Please enter your Gemini API key first');
-      setShowApiInput(true);
-      return;
-    }
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      text: input,
-      sender: 'user',
-      timestamp: new Date(),
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
-    setIsLoading(true);
-
-    try {
-      const contextPrompt = currentContext 
-        ? `Context: The user is currently ${currentContext}. ` 
-        : '';
-
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [
-                  {
-                    text: `${contextPrompt}You are AstroBuddy, an AI assistant for the ExoWorlds game that helps with exoplanet colonization. Be helpful, educational, and engaging. Focus on space science, colony management, and planetary conditions. Keep responses concise but informative. User question: ${input}`,
-                  },
-                ],
-              },
-            ],
-            generationConfig: {
-              temperature: 0.7,
-              topP: 0.9,
-              maxOutputTokens: 500,
-            },
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to get response from AI');
-      }
-
-      const data = await response.json();
-      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 
-        "I'm having trouble connecting to my knowledge base right now. Please try again!";
-
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: aiResponse,
-        sender: 'assistant',
-        timestamp: new Date(),
-      };
-
-      setMessages(prev => [...prev, assistantMessage]);
-    } catch (error) {
-      console.error('Error calling Gemini API:', error);
-      toast.error('Failed to get response from AstroBuddy');
-      
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        text: "I'm experiencing some technical difficulties. Please check your API key and try again!",
-        sender: 'assistant',
-        timestamp: new Date(),
-      };
-      
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  };
 
   if (!isVisible) {
     return (
@@ -208,60 +89,11 @@ export const AstroBuddy: React.FC<AstroBuddyProps> = ({
           </div>
         )}
         
-        <ScrollArea className="flex-1 h-full" ref={scrollAreaRef}>
-          <div className="space-y-3 pr-4">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[80%] p-3 rounded-lg text-sm ${
-                    message.sender === 'user'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-white/10 text-white'
-                  }`}
-                >
-                  {message.sender === 'assistant' && (
-                    <div className="typewriter-effect">
-                      {message.text}
-                    </div>
-                  )}
-                  {message.sender === 'user' && message.text}
-                </div>
-              </div>
-            ))}
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-white/10 text-white p-3 rounded-lg text-sm">
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </ScrollArea>
-        
-        <div className="flex space-x-2">
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Ask AstroBuddy anything..."
-            disabled={isLoading}
-            className="flex-1 bg-white/5 border-white/20 text-white placeholder:text-muted-foreground"
-          />
-          <Button
-            onClick={sendMessage}
-            disabled={isLoading || !input.trim()}
-            className="bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50"
-          >
-            Send
-          </Button>
-        </div>
+        <AstroBuddyChat 
+          currentContext={currentContext}
+          apiKey={apiKey}
+          className="flex-1"
+        />
       </CardContent>
     </Card>
   );
