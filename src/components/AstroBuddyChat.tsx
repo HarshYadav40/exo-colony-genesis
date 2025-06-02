@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -128,8 +127,8 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
 
   return (
     <div className={`flex flex-col h-full ${className}`}>
-      {/* Messages Container with Custom Scrollbar */}
-      <ScrollArea className="flex-1 px-4 py-2">
+      {/* Messages Container */}
+      <div className="flex-1 overflow-y-auto scrollbar-dark px-4 py-2 min-h-0">
         <div className="space-y-4">
           {messages.map((message) => (
             <div
@@ -145,11 +144,12 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
                   </Avatar>
                 )}
                 <div
-                  className={`p-3 rounded-lg text-sm break-words ${
+                  className={`p-3 rounded-lg text-sm break-words word-wrap ${
                     message.sender === 'user'
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-white/10 text-white'
                   }`}
+                  style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}
                 >
                   {message.text}
                 </div>
@@ -176,9 +176,9 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
           )}
           <div ref={messagesEndRef} />
         </div>
-      </ScrollArea>
+      </div>
 
-      {/* Input Area - Always visible at bottom */}
+      {/* Input Area - Fixed at bottom */}
       <div className="border-t border-white/10 p-3 bg-black/20 backdrop-blur-sm flex-shrink-0">
         <div className="flex space-x-2">
           <Input
