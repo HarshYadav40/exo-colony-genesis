@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { AstroBuddyChat } from './AstroBuddyChat';
 
@@ -17,8 +16,8 @@ export const AstroBuddy: React.FC<AstroBuddyProps> = ({
   onToggle,
   currentContext,
 }) => {
-  const [apiKey, setApiKey] = useState('AIzaSyAYmEj1tHJMiRm7lMsQbJ83Tf3IfkkY0Fg');
-  const [showApiInput, setShowApiInput] = useState(false);
+  // Use the pre-configured API key without exposing it to the user
+  const apiKey = 'AIzaSyAYmEj1tHJMiRm7lMsQbJ83Tf3IfkkY0Fg';
 
   if (!isVisible) {
     return (
@@ -46,49 +45,17 @@ export const AstroBuddy: React.FC<AstroBuddyProps> = ({
           </Avatar>
           <CardTitle className="text-primary font-orbitron">AstroBuddy</CardTitle>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            onClick={() => setShowApiInput(!showApiInput)}
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground hover:text-white text-xs"
-          >
-            ⚙️
-          </Button>
-          <Button
-            onClick={onToggle}
-            variant="ghost"
-            size="sm"
-            className="text-muted-foreground hover:text-white"
-          >
-            ×
-          </Button>
-        </div>
+        <Button
+          onClick={onToggle}
+          variant="ghost"
+          size="sm"
+          className="text-muted-foreground hover:text-white"
+        >
+          ×
+        </Button>
       </CardHeader>
       
-      <CardContent className="flex-1 flex flex-col space-y-3 p-4">
-        {showApiInput && (
-          <div className="bg-blue-500/20 border border-blue-500/50 rounded p-3 mb-2">
-            <p className="text-xs text-blue-200 mb-2">
-              Gemini API Key (pre-filled with default):
-            </p>
-            <Input
-              type="password"
-              placeholder="Gemini API Key"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              className="text-xs"
-            />
-            <Button
-              onClick={() => setShowApiInput(false)}
-              size="sm"
-              className="mt-2 text-xs"
-            >
-              Save
-            </Button>
-          </div>
-        )}
-        
+      <CardContent className="flex-1 flex flex-col p-0">
         <AstroBuddyChat 
           currentContext={currentContext}
           apiKey={apiKey}
