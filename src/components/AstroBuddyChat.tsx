@@ -1,8 +1,8 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 
 interface Message {
@@ -127,15 +127,15 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
 
   return (
     <div className={`flex flex-col h-full ${className}`}>
-      {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto scrollbar-dark px-4 py-2 min-h-0">
-        <div className="space-y-4">
+      {/* Messages Container with proper scrolling */}
+      <div className="flex-1 overflow-y-auto scrollbar-dark px-4 py-2 min-h-0 max-h-full">
+        <div className="space-y-4 w-full">
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex w-full ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <div className="flex items-start space-x-2 max-w-[85%]">
+              <div className="flex items-start space-x-2 max-w-[85%] min-w-0">
                 {message.sender === 'assistant' && (
                   <Avatar className="w-6 h-6 mt-1 pulse-glow flex-shrink-0">
                     <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
@@ -144,12 +144,17 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
                   </Avatar>
                 )}
                 <div
-                  className={`p-3 rounded-lg text-sm break-words word-wrap ${
+                  className={`p-3 rounded-lg text-sm min-w-0 flex-1 ${
                     message.sender === 'user'
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-white/10 text-white'
                   }`}
-                  style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}
+                  style={{ 
+                    wordWrap: 'break-word',
+                    overflowWrap: 'break-word',
+                    wordBreak: 'break-word',
+                    hyphens: 'auto'
+                  }}
                 >
                   {message.text}
                 </div>
@@ -157,7 +162,7 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
             </div>
           ))}
           {isLoading && (
-            <div className="flex justify-start">
+            <div className="flex justify-start w-full">
               <div className="flex items-start space-x-2">
                 <Avatar className="w-6 h-6 mt-1 pulse-glow flex-shrink-0">
                   <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
