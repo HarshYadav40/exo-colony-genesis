@@ -127,59 +127,73 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
 
   return (
     <div className={`flex flex-col h-full ${className}`}>
-      {/* Messages Container with proper scrolling */}
-      <div className="flex-1 overflow-y-auto scrollbar-dark px-4 py-2 min-h-0 max-h-full">
-        <div className="space-y-4 w-full">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex w-full ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
-              <div className="flex items-start space-x-2 max-w-[85%] min-w-0">
-                {message.sender === 'assistant' && (
+      {/* Messages Container with visible scrollbar */}
+      <div 
+        className="flex-1 px-4 py-2 overflow-hidden"
+        style={{ 
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 0
+        }}
+      >
+        <div 
+          className="overflow-y-scroll scrollbar-dark flex-1"
+          style={{
+            scrollbarWidth: 'thin',
+            scrollbarColor: 'rgba(16, 185, 129, 0.5) rgba(255, 255, 255, 0.1)'
+          }}
+        >
+          <div className="space-y-4 pr-2">
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex w-full ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div className="flex items-start space-x-2 max-w-[80%]">
+                  {message.sender === 'assistant' && (
+                    <Avatar className="w-6 h-6 mt-1 pulse-glow flex-shrink-0">
+                      <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
+                        AB
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
+                  <div
+                    className={`p-3 rounded-lg text-sm break-words ${
+                      message.sender === 'user'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-white/10 text-white'
+                    }`}
+                    style={{ 
+                      wordWrap: 'break-word',
+                      overflowWrap: 'break-word',
+                      wordBreak: 'break-word'
+                    }}
+                  >
+                    {message.text}
+                  </div>
+                </div>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex justify-start w-full">
+                <div className="flex items-start space-x-2">
                   <Avatar className="w-6 h-6 mt-1 pulse-glow flex-shrink-0">
                     <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
                       AB
                     </AvatarFallback>
                   </Avatar>
-                )}
-                <div
-                  className={`p-3 rounded-lg text-sm min-w-0 flex-1 ${
-                    message.sender === 'user'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-white/10 text-white'
-                  }`}
-                  style={{ 
-                    wordWrap: 'break-word',
-                    overflowWrap: 'break-word',
-                    wordBreak: 'break-word',
-                    hyphens: 'auto'
-                  }}
-                >
-                  {message.text}
-                </div>
-              </div>
-            </div>
-          ))}
-          {isLoading && (
-            <div className="flex justify-start w-full">
-              <div className="flex items-start space-x-2">
-                <Avatar className="w-6 h-6 mt-1 pulse-glow flex-shrink-0">
-                  <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
-                    AB
-                  </AvatarFallback>
-                </Avatar>
-                <div className="bg-white/10 text-white p-3 rounded-lg text-sm">
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
-                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                    <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                  <div className="bg-white/10 text-white p-3 rounded-lg text-sm">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
+            )}
+            <div ref={messagesEndRef} />
+          </div>
         </div>
       </div>
 
