@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { toast } from 'sonner';
+import { Send } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -26,7 +27,7 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: "Greetings! I'm AstroBuddy, your AI assistant for exoplanet colonization. How can I assist you today?",
+      text: "Hello! I'm AstroBuddy, your AI assistant for exoplanet colonization. How can I help you today?",
       sender: 'assistant',
       timestamp: new Date(),
     },
@@ -126,68 +127,58 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
   };
 
   return (
-    <div className={`flex flex-col h-full ${className}`}>
-      {/* Messages Container with visible scrollbar */}
-      <div 
-        className="flex-1 px-4 py-2 overflow-hidden"
-        style={{ 
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: 0
-        }}
-      >
-        <div 
-          className="overflow-y-scroll scrollbar-dark flex-1"
-          style={{
-            scrollbarWidth: 'thin',
-            scrollbarColor: 'rgba(16, 185, 129, 0.5) rgba(255, 255, 255, 0.1)'
-          }}
-        >
-          <div className="space-y-4 pr-2">
+    <div className={`flex flex-col h-full bg-white ${className}`}>
+      {/* Messages Container */}
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full overflow-y-auto px-4 py-6">
+          <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`flex w-full ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex gap-4 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div className="flex items-start space-x-2 max-w-[80%]">
-                  {message.sender === 'assistant' && (
-                    <Avatar className="w-6 h-6 mt-1 pulse-glow flex-shrink-0">
-                      <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
-                        AB
-                      </AvatarFallback>
-                    </Avatar>
-                  )}
-                  <div
-                    className={`p-3 rounded-lg text-sm break-words ${
-                      message.sender === 'user'
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-white/10 text-white'
-                    }`}
-                    style={{ 
-                      wordWrap: 'break-word',
-                      overflowWrap: 'break-word',
-                      wordBreak: 'break-word'
-                    }}
-                  >
-                    {message.text}
-                  </div>
-                </div>
-              </div>
-            ))}
-            {isLoading && (
-              <div className="flex justify-start w-full">
-                <div className="flex items-start space-x-2">
-                  <Avatar className="w-6 h-6 mt-1 pulse-glow flex-shrink-0">
-                    <AvatarFallback className="bg-primary text-primary-foreground font-bold text-xs">
+                {message.sender === 'assistant' && (
+                  <Avatar className="w-8 h-8 flex-shrink-0 bg-emerald-500">
+                    <AvatarFallback className="bg-emerald-500 text-white font-semibold text-sm">
                       AB
                     </AvatarFallback>
                   </Avatar>
-                  <div className="bg-white/10 text-white p-3 rounded-lg text-sm">
-                    <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" />
-                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                    </div>
+                )}
+                
+                <div
+                  className={`max-w-[70%] ${
+                    message.sender === 'user'
+                      ? 'bg-blue-500 text-white rounded-2xl rounded-tr-md px-4 py-3'
+                      : 'bg-gray-100 text-gray-900 rounded-2xl rounded-tl-md px-4 py-3'
+                  }`}
+                >
+                  <div className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+                    {message.text}
+                  </div>
+                </div>
+                
+                {message.sender === 'user' && (
+                  <Avatar className="w-8 h-8 flex-shrink-0 bg-blue-500">
+                    <AvatarFallback className="bg-blue-500 text-white font-semibold text-sm">
+                      U
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+              </div>
+            ))}
+            
+            {isLoading && (
+              <div className="flex gap-4 justify-start">
+                <Avatar className="w-8 h-8 flex-shrink-0 bg-emerald-500">
+                  <AvatarFallback className="bg-emerald-500 text-white font-semibold text-sm">
+                    AB
+                  </AvatarFallback>
+                </Avatar>
+                <div className="bg-gray-100 text-gray-900 rounded-2xl rounded-tl-md px-4 py-3">
+                  <div className="flex items-center space-x-1">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                   </div>
                 </div>
               </div>
@@ -197,24 +188,27 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
         </div>
       </div>
 
-      {/* Input Area - Fixed at bottom */}
-      <div className="border-t border-white/10 p-3 bg-black/20 backdrop-blur-sm flex-shrink-0">
-        <div className="flex space-x-2">
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Ask AstroBuddy anything..."
-            disabled={isLoading}
-            className="flex-1 bg-white/5 border-white/20 text-white placeholder:text-muted-foreground"
-          />
-          <Button
-            onClick={sendMessage}
-            disabled={isLoading || !input.trim()}
-            className="bg-primary/20 hover:bg-primary/30 text-primary border border-primary/50"
-          >
-            Send
-          </Button>
+      {/* Input Area */}
+      <div className="border-t border-gray-200 bg-white p-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-end gap-3 bg-gray-50 rounded-2xl p-3">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Message AstroBuddy..."
+              disabled={isLoading}
+              className="flex-1 border-0 bg-transparent text-gray-900 placeholder:text-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0 resize-none min-h-[24px] py-2"
+            />
+            <Button
+              onClick={sendMessage}
+              disabled={isLoading || !input.trim()}
+              size="sm"
+              className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl p-2 h-8 w-8"
+            >
+              <Send className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </div>
