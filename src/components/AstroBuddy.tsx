@@ -25,7 +25,7 @@ export const AstroBuddy: React.FC<AstroBuddyProps> = ({
         onClick={onToggle}
         className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-blue-500 hover:bg-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 z-50"
       >
-        <MessageCircle className="w-6 h-6" />
+        <span className="text-2xl">🚀</span>
       </Button>
     );
   }
@@ -34,9 +34,9 @@ export const AstroBuddy: React.FC<AstroBuddyProps> = ({
     <Card className="fixed bottom-6 right-6 w-96 h-[600px] bg-white shadow-2xl border border-gray-200 rounded-2xl z-50 flex flex-col overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between p-4 border-b border-gray-200 bg-white">
         <div className="flex items-center space-x-3">
-          <Avatar className="w-8 h-8 bg-emerald-500">
-            <AvatarFallback className="bg-emerald-500 text-white font-semibold text-sm">
-              AB
+          <Avatar className="w-8 h-8 bg-transparent">
+            <AvatarFallback className="bg-transparent text-2xl">
+              👨‍🚀
             </AvatarFallback>
           </Avatar>
           <div>

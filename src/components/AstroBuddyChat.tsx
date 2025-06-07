@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -138,9 +137,9 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
                 className={`flex gap-4 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {message.sender === 'assistant' && (
-                  <Avatar className="w-8 h-8 flex-shrink-0 bg-emerald-500">
-                    <AvatarFallback className="bg-emerald-500 text-white font-semibold text-sm">
-                      AB
+                  <Avatar className="w-8 h-8 flex-shrink-0 bg-transparent">
+                    <AvatarFallback className="bg-transparent text-xl">
+                      👨‍🚀
                     </AvatarFallback>
                   </Avatar>
                 )}
@@ -169,9 +168,9 @@ export const AstroBuddyChat: React.FC<AstroBuddyChatProps> = ({
             
             {isLoading && (
               <div className="flex gap-4 justify-start">
-                <Avatar className="w-8 h-8 flex-shrink-0 bg-emerald-500">
-                  <AvatarFallback className="bg-emerald-500 text-white font-semibold text-sm">
-                    AB
+                <Avatar className="w-8 h-8 flex-shrink-0 bg-transparent">
+                  <AvatarFallback className="bg-transparent text-xl">
+                    👨‍🚀
                   </AvatarFallback>
                 </Avatar>
                 <div className="bg-gray-100 text-gray-900 rounded-2xl rounded-tl-md px-4 py-3">
