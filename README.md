@@ -1,18 +1,6 @@
-# Welcome to your Lovable project
+# Welcome to your space project
 
 ## Project info
-
-**URL**: https://lovable.dev/projects/1df9a66e-ebdb-454e-a903-2615ff0fc473
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/1df9a66e-ebdb-454e-a903-2615ff0fc473) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
 
 **Use your preferred IDE**
 
